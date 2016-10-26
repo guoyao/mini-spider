@@ -1,0 +1,16 @@
+# -*- mode:golang; coding:utf8; -*-
+ 
+# 项目ROOT路径
+WORKROOT('../../../')
+ 
+#使用硬链接copy.
+CopyUsingHardLink(True)
+ 
+#依赖模块
+CONFIGS('public/go/go13@1.3.2')
+CONFIGS('thirdsrc/go-lib/src@trunk', Libraries(''))
+ 
+# 调用自己真正的 Makefile or build.sh:
+TARGET('.dummy',
+       ShellCommands('make -j8 -f Makefile.my'),
+       CleanCommands('make -f Makefile.my clean'))

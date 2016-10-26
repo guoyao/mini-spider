@@ -1,0 +1,31 @@
+# -*- coding: gbk; mode: makefile; indent-tabs-mode: t; -*-
+ 
+# 设置GO的环境变量：
+export WORKROOT=$(shell cd ../../../ && pwd)
+export GOROOT=$(WORKROOT)/public/go/go13/go
+export GOPATH=$(shell pwd):$(WORKROOT)/public/go-lib:$(WORKROOT)/thirdsrc/go-lib
+ 
+# 设置go编译器路径
+GO=$(GOROOT)/bin/go
+ 
+# 设置自己的.a 所需的源码
+EXE:=mini_spider
+SRC:=$(wildcard ./src/spider/*.go)
+ 
+all: $(EXE)
+ 
+.PHONY: all clean check
+ 
+# 编译 mini_spider 程序
+$(EXE): src/mini_spider.go pkg/linux_amd64/spider.a
+    $(GO) build -x src/mini_spider.go
+    mkdir -p output/bin
+    cp mini_spider output/bin/
+ 
+# 编译自己的.a
+pkg/linux_amd64/spider.a: $(SRC)
+    $(GO) install spider
+ 
+clean:
+    rm -f output/*
+    rm -rf $(EXE) pkg/*
